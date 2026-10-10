@@ -41,7 +41,8 @@ const interests = [...pathways.map((p) => p.interest), "Something Else"];
  * Reads ?interest= and ?about= so pathway and community links arrive with
  * the form pre-filled.
  */
-export function ContactForm() {
+export function ContactForm({ variant = "default" }: { variant?: "default" | "reference" } = {}) {
+  const compact = variant === "reference";
   const {
     register,
     control,
@@ -78,7 +79,7 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit((data) => submit(data))}
       noValidate
-      className="space-y-5"
+      className={compact ? "space-y-3" : "space-y-5"}
       aria-describedby={status ? "form-status" : undefined}
     >
       <Suspense fallback={null}>
@@ -104,19 +105,21 @@ export function ContactForm() {
         </div>
       )}
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field id="firstName" label="First Name" error={errors.firstName?.message}>
+      <div className={cn("grid sm:grid-cols-2", compact ? "gap-3" : "gap-5")}>
+        <Field compact={compact} id="firstName" label="First Name" error={errors.firstName?.message}>
           <Input
             id="firstName"
+          placeholder={compact ? "First Name *" : undefined}
             autoComplete="given-name"
             className="h-12 bg-card"
             aria-invalid={!!errors.firstName}
             {...register("firstName", { required: "First name is required" })}
           />
         </Field>
-        <Field id="lastName" label="Last Name" error={errors.lastName?.message}>
+        <Field compact={compact} id="lastName" label="Last Name" error={errors.lastName?.message}>
           <Input
             id="lastName"
+          placeholder={compact ? "Last Name *" : undefined}
             autoComplete="family-name"
             className="h-12 bg-card"
             aria-invalid={!!errors.lastName}
@@ -125,9 +128,10 @@ export function ContactForm() {
         </Field>
       </div>
 
-      <Field id="email" label="Email" error={errors.email?.message}>
+      <Field compact={compact} id="email" label="Email" error={errors.email?.message}>
         <Input
           id="email"
+          placeholder={compact ? "Email *" : undefined}
           type="email"
           autoComplete="email"
           inputMode="email"
@@ -140,9 +144,10 @@ export function ContactForm() {
         />
       </Field>
 
-      <Field id="phone" label="Phone Number" error={errors.phone?.message}>
+      <Field compact={compact} id="phone" label="Phone Number" error={errors.phone?.message}>
         <Input
           id="phone"
+          placeholder={compact ? "Phone Number *" : undefined}
           type="tel"
           autoComplete="tel"
           inputMode="tel"
@@ -152,7 +157,7 @@ export function ContactForm() {
         />
       </Field>
 
-      <Field id="interest" label="I'm interested in…" error={errors.interest?.message}>
+      <Field compact={compact} id="interest" label="I'm interested in…" error={errors.interest?.message}>
         <Controller
           control={control}
           name="interest"
@@ -164,7 +169,7 @@ export function ContactForm() {
                 className="w-full bg-card data-[size=default]:h-12"
                 aria-invalid={!!errors.interest}
               >
-                <SelectValue placeholder="Select one" />
+                <SelectValue placeholder={compact ? "I’m interested in… *" : "Select one"} />
               </SelectTrigger>
               <SelectContent>
                 {interests.map((i) => (
@@ -178,10 +183,11 @@ export function ContactForm() {
         />
       </Field>
 
-      <Field id="message" label="Your Message" optional>
+      <Field compact={compact} id="message" label="Your Message" optional>
         <Textarea
           id="message"
           rows={5}
+          placeholder={compact ? "Your Message" : undefined}
           className="resize-none bg-card"
           {...register("message")}
         />
@@ -197,7 +203,7 @@ export function ContactForm() {
         {...register("botcheck")}
       />
 
-      <Button type="submit" size="cta" disabled={isSubmitting} className="w-full sm:w-auto" data-analytics="contact-submit">
+      <Button type="submit" size="cta" disabled={isSubmitting} className={cn("w-full sm:w-auto", compact && "rounded-[3px] px-9 uppercase tracking-[0.06em]")} data-analytics="contact-submit">
         {isSubmitting ? (
           <>
             <Loader2 className="animate-spin" aria-hidden="true" />
@@ -234,8 +240,10 @@ function Field({
   label,
   error,
   optional,
+  compact,
   children,
 }: {
+  compact?: boolean;
   id: string;
   label: string;
   error?: string;
@@ -243,8 +251,8 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className="text-sm font-medium text-navy">
+    <div className={compact ? "space-y-1" : "space-y-2"}>
+      <Label htmlFor={id} className={cn("text-sm font-medium text-navy", compact && "sr-only")}>
         {label}
         {!optional && (
           <span className="text-gold-ink" aria-hidden="true">
