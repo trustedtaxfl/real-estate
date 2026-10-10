@@ -34,7 +34,7 @@
 .footerMarks img { width: 150px; }
 .eho { width: 38px; height: auto; color: #0c2243; flex-shrink: 0; }
 .footerLegal, .footerLine { margin: 0; font-size: 13px; color: #2c3a4f; }
-.footerLegal span + span { margin-left: 12px; padding-left: 12px; border-left: 1px solid #9aa3ad; }
+.footerLegal > * + * { margin-left: 12px; padding-left: 12px; border-left: 1px solid #9aa3ad; }
 .footerLine { color: #0c2243; }
 
 /* Tablet */
@@ -72,7 +72,7 @@
   .footerMarks img { width: calc(15.6 * var(--u)); }
   .eho { width: calc(3.8 * var(--u)); }
   .footerLegal { grid-column: 1 / 3; grid-row: 2; font-size: calc(1.22 * var(--u)); }
-  .footerLegal span + span { margin-left: calc(1.1 * var(--u)); padding-left: calc(1.1 * var(--u)); }
+  .footerLegal > * + * { margin-left: calc(1.1 * var(--u)); padding-left: calc(1.1 * var(--u)); }
   .footerLine { grid-column: 3; grid-row: 2; font-size: calc(1.22 * var(--u)); }
 }
 
@@ -86,3 +86,6 @@
   .footerNav { margin-left: 0; font-size: calc(1.2 * var(--u)); }
   .footerNav a { padding: 0 calc(1.9 * var(--u)); white-space: nowrap; }
 }
+
+.footerLegal a:hover { color: #9a7230; }
+@container (min-width: 1000px) { .footerLegal > * + * { margin-left: calc(1.1 * var(--u)); padding-left: calc(1.1 * var(--u)); } }

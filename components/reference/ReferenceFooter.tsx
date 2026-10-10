@@ -4,7 +4,7 @@ import { nav, site } from "@/lib/site";
 import styles from "./reference.module.css";
 
 /** Footer from the inner-page mockups: logo, nav, brokerage marks, then the copyright row. */
-export function ReferenceFooter() {
+export function ReferenceFooter({ policies = false }: { policies?: boolean }) {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInner}>
@@ -18,7 +18,10 @@ export function ReferenceFooter() {
           <Image src="/home-reference/dalton-wade.png" alt="Dalton Wade Real Estate Group" width={2305} height={582} sizes="170px" />
           <EqualHousingMark />
         </div>
-        <p className={styles.footerLegal}><span>© 2026 {site.name}</span><span>All Rights Reserved.</span></p>
+        <p className={styles.footerLegal}>
+          <span>© 2026 {site.name}</span><span>All Rights Reserved.</span>
+          {policies && <><Link href="/privacy-policy">Privacy Policy</Link><Link href="/terms-of-use">Terms of Use</Link></>}
+        </p>
         <p className={styles.footerLine}>{site.footerLine}</p>
       </div>
     </footer>
