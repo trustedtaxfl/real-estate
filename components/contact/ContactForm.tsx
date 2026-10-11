@@ -3,7 +3,6 @@
 import { Suspense, useEffect, useState } from "react";
 import { Controller, useForm, type UseFormSetValue } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
-import useWeb3Forms from "@web3forms/react";
 import { AlertCircle, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,8 +34,8 @@ const interests = [...pathways.map((p) => p.interest), "Something Else"];
 
 /**
  * Contact form per the Let's Talk copy: First Name, Last Name, Email, Phone,
- * "I'm interested in" and Message. Submits through Web3Forms (existing
- * integration) and can be pointed at a CRM later.
+ * "I'm interested in" and Message. Submits to /api/contact, which emails
+ * Paul through Resend.
  *
  * Reads ?interest= and ?about= so pathway and community links arrive with
  * the form pre-filled.
@@ -56,24 +55,25 @@ export function ContactForm({ variant = "default" }: { variant?: "default" | "re
 
   const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
 
-  const { submit } = useWeb3Forms({
-    access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "",
-    settings: {
-      from_name: `${site.wordmark} website`,
-      subject: "New inquiry from PaulEtheRealtor.com",
-    },
-    onSuccess: () => {
+  const submit = async (data: FormData) => {
+    setStatus(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Contact request failed: ${res.status}`);
       trackEvent("contact-form-submitted");
       setStatus({ ok: true, text: "Thank you. Your message is on its way and I'll be in touch soon." });
       reset({ interest: "", message: "" });
-    },
-    onError: () => {
+    } catch {
       setStatus({
         ok: false,
         text: `Something went wrong sending your message. Please call or text ${site.phone} instead.`,
       });
-    },
-  });
+    }
+  };
 
   return (
     <form
