@@ -6,8 +6,8 @@
  * this city list on 2026-10-10; the Page 2 mockup's list (Winter Park, DeLand,
  * Deltona, Winter Haven) is not used.
  *
- * `image` is optional: Windermere / Dr. Phillips has no photo yet, so its
- * tile renders a designed navy panel until one is supplied.
+ * `image` is optional: a community without a photo renders a designed navy
+ * panel, and the Explore grid only lists communities that have one.
  */
 export interface Community {
   slug: string;
@@ -184,8 +184,10 @@ export const communities: Community[] = [
   },
   {
     slug: "windermere-dr-phillips",
+    image: "/explore/dr-phillips.jpg",
+    imageAlt: "Restaurant Row in Dr. Phillips at dusk, with palm-lined streets and outdoor dining",
     name: "Windermere / Dr. Phillips",
-    shortName: "Dr. Phillips",
+    shortName: "Dr. Phillips / Windermere",
     tagline: "Established. Refined. Exceptionally Located.",
     county: "Orange County",
     location:

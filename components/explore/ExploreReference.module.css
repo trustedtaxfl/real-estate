@@ -248,3 +248,9 @@
 @container (min-width: 1000px) {
   .hero { background: linear-gradient(90deg, #0b1b33f7 0%, #0b1b33e6 26%, #0b1b33a6 40%, #0b1b3333 52%, #0b1b3300 62%), url('/explore/hero-skyline.jpg') center 60% / cover no-repeat, #0b1b33; }
 }
+
+/* Long labels (e.g. "Dr. Phillips / Windermere") step down slightly so the arrow stays inside the tile. */
+@container (min-width: 1000px) {
+  .cityLong h3 { gap: calc(.7 * var(--u)); font-size: calc(1.36 * var(--u)); }
+  .cityLong h3 svg { width: calc(1.4 * var(--u)); height: calc(1.4 * var(--u)); }
+}
