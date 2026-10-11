@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { site } from "@/lib/site";
+import { buildContactEmail } from "@/lib/email/contact-email";
 
 /**
  * Let's Talk form submissions, sent to Paul through Resend.
@@ -8,12 +9,17 @@ import { site } from "@/lib/site";
  * RESEND_API_KEY      Resend key with sending access to pauletherealtor.com.
  * CONTACT_TO_EMAIL    Inbox that receives inquiries (defaults to the site email).
  * CONTACT_FROM_EMAIL  Sender on the verified domain.
+ *
+ * The email's logo loads from the production deployment, which Vercel exposes
+ * as VERCEL_PROJECT_PRODUCTION_URL.
  */
 const toEmail = process.env.CONTACT_TO_EMAIL || site.email;
 const fromEmail = process.env.CONTACT_FROM_EMAIL || `${site.wordmark} Website <website@pauletherealtor.com>`;
 
 const limits = { firstName: 80, lastName: 80, email: 200, phone: 40, interest: 80, message: 5000 } as const;
 type Field = keyof typeof limits;
+
+const siteOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : site.url;
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -44,22 +50,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Email is not configured." }, { status: 500 });
   }
 
-  const name = `${data.firstName} ${data.lastName}`;
-  const rows: [string, string][] = [
-    ["Name", name],
-    ["Email", data.email],
-    ["Phone", data.phone],
-    ["Interested in", data.interest],
-    ["Message", data.message || "(no message)"],
-  ];
-
+  const { subject, html, text } = buildContactEmail(data, siteOrigin);
   const { error } = await new Resend(apiKey).emails.send({
     from: fromEmail,
     to: toEmail,
     replyTo: data.email,
-    subject: `New inquiry from ${name}: ${data.interest}`,
-    text: `New inquiry from ${site.domain}\n\n${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nReply to this email to respond directly.`,
-    html: emailHtml(rows),
+    subject,
+    text,
+    html,
   });
 
   if (error) {
@@ -69,18 +67,3 @@ export async function POST(request: Request) {
   return NextResponse.json({ ok: true });
 }
 
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
-}
-
-function emailHtml(rows: [string, string][]) {
-  const cells = rows
-    .map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#6b7280;vertical-align:top;white-space:nowrap">${k}</td><td style="padding:8px 0;color:#0c2243;white-space:pre-wrap">${escapeHtml(v)}</td></tr>`)
-    .join("");
-  return `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5">
-<p style="margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#a8772d">New website inquiry</p>
-<p style="margin:0 0 16px;color:#0c2243">Someone filled out the Let&rsquo;s Talk form on ${site.domain}.</p>
-<table style="border-collapse:collapse">${cells}</table>
-<p style="margin:20px 0 0;color:#6b7280;font-size:13px">Reply to this email to respond directly.</p>
-</div>`;
-}
