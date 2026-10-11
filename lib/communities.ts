@@ -187,7 +187,7 @@ export const communities: Community[] = [
     image: "/explore/dr-phillips.jpg",
     imageAlt: "Restaurant Row in Dr. Phillips at dusk, with palm-lined streets and outdoor dining",
     name: "Windermere / Dr. Phillips",
-    shortName: "Dr. Phillips / Windermere",
+    shortName: "Windermere / Dr. Phillips",
     tagline: "Established. Refined. Exceptionally Located.",
     county: "Orange County",
     location:
@@ -301,5 +301,13 @@ export const communityFacts: { key: keyof Community; label: string }[] = [
   { key: "realEstateNote", label: "Real Estate Note" },
 ];
 
-/** Communities shown on the Explore grid: only those with a supplied photo. */
-export const exploreCommunities = communities.filter((c) => c.image);
+/** Explore grid order, as listed in the client's community copy PDF. */
+const exploreOrder = [
+  "orlando", "kissimmee", "clermont", "winter-garden", "st-cloud", "apopka",
+  "lake-nona", "horizon-west", "davenport", "oviedo", "sanford", "windermere-dr-phillips",
+];
+
+/** Communities shown on the Explore grid, in the PDF's order: only those with a supplied photo. */
+export const exploreCommunities = exploreOrder
+  .map((slug) => communities.find((c) => c.slug === slug))
+  .filter((c): c is Community => !!c?.image);

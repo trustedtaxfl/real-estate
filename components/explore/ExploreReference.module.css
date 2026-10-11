@@ -254,3 +254,15 @@
   .cityLong h3 { gap: calc(.7 * var(--u)); font-size: calc(1.36 * var(--u)); }
   .cityLong h3 svg { width: calc(1.4 * var(--u)); height: calc(1.4 * var(--u)); }
 }
+
+/* Path headlines and Paul's quote (from the Page 2 copy document). */
+.path .pathHeadline { margin: 0 0 10px; font-family: var(--font-libre-caslon), Georgia, serif; font-size: 20px; line-height: 1.2; color: #0c2243; }
+.quote { max-width: 760px; margin: 34px auto 0; padding: 0 12px; text-align: center; }
+.quote p { margin: 0; font-family: var(--font-libre-caslon), Georgia, serif; font-style: italic; font-size: 22px; line-height: 1.4; color: #0c2243; }
+.quote footer { margin-top: 12px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #a8772d; }
+@container (min-width: 1000px) {
+  .path .pathHeadline { margin: 0 0 calc(.8 * var(--u)); font-size: calc(1.75 * var(--u)); line-height: 1.2; }
+  .quote { max-width: calc(64 * var(--u)); margin-top: calc(3 * var(--u)); }
+  .quote p { font-size: calc(2.1 * var(--u)); }
+  .quote footer { margin-top: calc(1 * var(--u)); font-size: calc(1.05 * var(--u)); }
+}

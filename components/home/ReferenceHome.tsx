@@ -113,7 +113,7 @@ export function ReferenceHome() {
             <Link href="/about" className={styles.goldButton}>Meet Paul <ArrowRight aria-hidden="true" /></Link>
           </div>
           <div className={styles.values}>
-            <div><Handshake aria-hidden="true" /><p><strong>Client-Focused</strong><span>Always your best interest.</span></p></div>
+            <div><Handshake aria-hidden="true" /><p><strong>Client-Focused</strong><span>Always your best interests.</span></p></div>
             <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinejoin="round" aria-hidden="true"><path d="M3 21h18" /><rect x="4" y="13" width="4" height="8" /><rect x="10" y="9" width="4" height="12" /><rect x="16" y="4" width="4" height="17" /></svg><p><strong>Strategic Approach</strong><span>Data-driven. Results-oriented.</span></p></div>
             <div><MapPin aria-hidden="true" /><p><strong>Local Expertise</strong><span>Central Florida is home.</span></p></div>
           </div>

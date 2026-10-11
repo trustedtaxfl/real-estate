@@ -43,6 +43,7 @@ export function ExploreReference() {
               <article key={p.slug} id={p.slug} className={styles.path}>
                 <span className={styles.pathIcon}><PathIcon slug={p.slug} /></span>
                 <h3>{p.title}</h3>
+                <p className={styles.pathHeadline}>{p.headline}</p>
                 <p>{p.body}</p>
                 <Link href={`/lets-talk?interest=${encodeURIComponent(p.interest)}#contact`} className={styles.pathLink}>
                   Learn More <ArrowRight aria-hidden="true" /><span className="sr-only"> about {p.title.toLowerCase()}</span>
@@ -50,6 +51,10 @@ export function ExploreReference() {
               </article>
             ))}
           </div>
+          <blockquote className={styles.quote}>
+            <p>“It’s not just about finding a house — it’s about finding the right place for your next chapter.”</p>
+            <footer>— Paul E.</footer>
+          </blockquote>
         </section>
 
         <section id="communities" className={styles.communities} aria-labelledby="communities-title">
